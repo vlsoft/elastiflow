@@ -1,5 +1,5 @@
 #------------------------------------------------------------------------------
-# Portions of this file are Copyright (C)2019 Robert Cowart
+# Portions of this file are Copyright (C)2020 Robert Cowart
 # 
 # Portions of this file are subject to the Robert Cowart Public License (the
 # "License") and may not be used or distributed except in compliance with the
@@ -12,37 +12,27 @@
 # the specific language governing rights and limitations under the License.
 # 
 # The Original Source Code was developed by Robert Cowart. Portions created by
-# Robert Cowart are Copyright (C)2019 Robert Cowart. All Rights Reserved.
+# Robert Cowart are Copyright (C)2020 Robert Cowart. All Rights Reserved.
 #------------------------------------------------------------------------------
 
-FROM docker.elastic.co/logstash/logstash-oss:6.1.4
+FROM docker.elastic.co/logstash/logstash:7.8.1
 
 ARG BUILD_DATE
 
 LABEL org.opencontainers.image.created="$BUILD_DATE" \
-      org.opencontainers.image.authors="rob@koiossian.com" \
+      org.opencontainers.image.authors="elastiflow@gmail.com" \
       org.opencontainers.image.url="https://github.com/robcowart/elastiflow/README.md" \
       org.opencontainers.image.documentation="https://github.com/robcowart/elastiflow/DOCKER.md" \
       org.opencontainers.image.source="https://github.com/robcowart/elastiflow" \
-      org.opencontainers.image.version="3.5.2" \
+      org.opencontainers.image.version="4.0.1" \
       org.opencontainers.image.vendor="Robert Cowart" \
       org.opencontainers.image.title="ElastiFlow™ - Logstash" \
-      org.opencontainers.image.description="Logstash with ElastiFlow™ pipeline."
+      org.opencontainers.image.description="Logstash with the ElastiFlow™ pipeline."
 
 ENV ELASTIFLOW_ES_HOST="http://127.0.0.1:9200"
 
 RUN $HOME/bin/logstash-plugin install logstash-codec-sflow \
-    && $HOME/bin/logstash-plugin update logstash-codec-netflow \
-    && $HOME/bin/logstash-plugin update logstash-input-udp \
-    && $HOME/bin/logstash-plugin update logstash-input-tcp \
-    && $HOME/bin/logstash-plugin update logstash-filter-cidr \
-    && $HOME/bin/logstash-plugin update logstash-filter-date \
-    && $HOME/bin/logstash-plugin update logstash-filter-dns \
-    && $HOME/bin/logstash-plugin update logstash-filter-geoip \
-    && $HOME/bin/logstash-plugin update logstash-filter-mutate \
-    && $HOME/bin/logstash-plugin update logstash-filter-ruby \
-    && $HOME/bin/logstash-plugin update logstash-filter-translate \
-    && $HOME/bin/logstash-plugin update logstash-output-elasticsearch
+    && $HOME/bin/logstash-plugin update
 
 WORKDIR /usr/share/logstash/config
 COPY --chown=logstash:logstash ./docker_assets/logstash.yml ./
